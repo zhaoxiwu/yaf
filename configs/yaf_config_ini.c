@@ -369,6 +369,12 @@ yaf_config_t *yaf_config_ini_instance(yaf_config_t *this_ptr, zval *filename, zv
 				yaf_trigger_error(E_ERROR, "There is no section '%s' in '%s'", Z_STRVAL_P(section_name), ini_file);
 				return NULL;
 			}
+
+			if (Z_ARRVAL_P(section) == NULL) {
+				zval_ptr_dtor(&configs);
+				yaf_trigger_error(E_ERROR, "There is no section '%s' in '%s'", Z_STRVAL_P(section_name), ini_file);
+				return NULL;
+			}
 			array_init(&zv);
 			zend_hash_copy(Z_ARRVAL(zv), Z_ARRVAL_P(section), (copy_ctor_func_t) zval_add_ref);
 			ZVAL_COPY_VALUE(&garbage, &configs);
